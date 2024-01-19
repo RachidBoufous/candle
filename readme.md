@@ -1,0 +1,1 @@
+# A simple Text Editor built with RUST ❤️
