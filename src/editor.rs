@@ -8,6 +8,8 @@ pub struct Editor {
     // pub: means that we can access this struct from outside the file
 }
 
+
+
 impl Editor {
     pub fn run(&self) {
         let _stdout = stdout().into_raw_mode().unwrap(); // read data from standard input (the keyboard)
@@ -36,6 +38,10 @@ impl Editor {
             }
         }
     }
+
+    pub fn default() -> Self {
+        Self {}
+    }
 }
 
 
@@ -47,3 +53,4 @@ impl Editor {
 fn die(e: std::io::Error) {
     panic!("{}", e); // a macro that crashes the program and prints the error
 }
+
