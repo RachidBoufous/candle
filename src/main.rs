@@ -25,21 +25,21 @@ fn die(e: std::io::Error) {
 }
 
 fn main() {
-    let _stdout = stdout().into_raw_mode().unwrap();
+    let _stdout = stdout().into_raw_mode().unwrap(); // read data from standard input (the keyboard)
 
-    for b in io::stdin().bytes() {
+    for b in io::stdin().bytes() { // we loop through each byte of the input
         match b {  // match is like a switch statement
             Ok(b) => { // if the byte is valid (not an error)
                 let c = b as char; // convert the byte to a character
 
                 if c.is_control() { // we check if the character is a control character
-                    println!("{:?} \r", b);
+                    println!("{:?} \r", b); // if it is, we print the byte
                 } else {
-                    println!("{:?} ({})\r", b, c);
+                    println!("{:?} ({})\r", b, c); // otherwise, we print the byte and the character
                 }
 
 
-                if b == to_ctrl_byte('q') {
+                if b == to_ctrl_byte('q') { // if the byte is the control byte of the letter q
                         break;
                 }
 
