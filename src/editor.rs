@@ -1,4 +1,4 @@
-use std::io::{self, stdout};
+use std::io::{self, stdout, Write};
 use termion::event::Key; // we import the Key enum
 use termion::input::TermRead; // we import the TermRead trait
 use termion::raw::IntoRawMode; //
@@ -14,18 +14,32 @@ impl Editor {
         let _stdout = stdout().into_raw_mode().unwrap(); // read data from standard input (the keyboard)
 
         loop {
-            if let Err(error) = self.process_keypress() {
+            if let Err(error) = self.refresh_screen() {
                 die(error);
             }
 
             if self.should_quit {
                 break;
             }
+
+            if let Err(error) = self.process_keypress() {
+                die(error);
+            }
         }
     }
 
     pub fn default() -> Self {
         Self {should_quit:false}
+    }
+
+    fn refresh_screen(&self) -> Result<(), std::io::Error> {
+        // print!("\x1b[2J"); // clear the screen
+        // \x means that we are using hexadecimal numbers
+        // 1b is the hexadecimal number for the escape key
+        // [2J is the code to clear the screen ;; for reference (https://vt100.net/docs/vt100-ug/chapter3.html#ED)
+        // OR we could do this
+        print!("{}", termion::clear::All); // clear the screen
+        io::stdout().flush() // flush the screen
     }
 
     fn process_keypress(&mut self) -> Result<(), std::io::Error>{
