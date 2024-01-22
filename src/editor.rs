@@ -40,7 +40,11 @@ impl Editor {
         // OR we could do this
         print!("{}{}", termion::clear::All, termion::cursor::Goto(1,1)); // clear the screen
         if self.should_quit {
-            println!("{} Quitting Candle, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
+            println!("{}👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
+        }
+        else {
+            self.draw_rows();
+            print!("{}", termion::cursor::Goto(1,1)); // move the cursor to the top left corner
         }
         io::stdout().flush() // flush the screen
     }
@@ -53,6 +57,12 @@ impl Editor {
             _ => (),
         }
         Ok(())
+    }
+
+    fn draw_rows(&self) {
+        for _ in 0..24 { // we are printing 24 tildes
+            println!("👾\r");
+        }
     }
 
 
