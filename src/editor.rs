@@ -6,28 +6,33 @@ use termion::raw::IntoRawMode; //
 pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
     // pub: means that we can access this struct from outside the file
+    should_quit: bool,
 }
 
 impl Editor {
-    pub fn run(&self) {
+    pub fn run(&mut self) {
         let _stdout = stdout().into_raw_mode().unwrap(); // read data from standard input (the keyboard)
 
         loop {
             if let Err(error) = self.process_keypress() {
                 die(error);
             }
+
+            if self.should_quit {
+                break;
+            }
         }
     }
 
     pub fn default() -> Self {
-        Self {}
+        Self {should_quit:false}
     }
 
-    fn process_keypress(&self) -> Result<(), std::io::Error>{
+    fn process_keypress(&mut self) -> Result<(), std::io::Error>{
         let key_pressed = read_key()?;
 
         match key_pressed {
-            Key::Ctrl('q') => panic!("Program end"),
+            Key::Ctrl('q') => self.should_quit = true,
             _ => (),
         }
         Ok(())
