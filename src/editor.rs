@@ -1,3 +1,4 @@
+use crate::Terminal::Terminal;
 use std::io::{self, stdout, Write};
 use termion::event::Key; // we import the Key enum
 use termion::input::TermRead; // we import the TermRead trait
@@ -7,6 +8,7 @@ pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
     // pub: means that we can access this struct from outside the file
     should_quit: bool,
+    terminal: Terminal,
 }
 
 impl Editor {
@@ -29,7 +31,10 @@ impl Editor {
     }
 
     pub fn default() -> Self {
-        Self {should_quit:false}
+        Self {
+            should_quit:false, // we are initializing the struct with the should_quit variable set to false
+            terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
+        }
     }
 
     fn refresh_screen(&self) -> Result<(), std::io::Error> {
@@ -40,7 +45,7 @@ impl Editor {
         // OR we could do this
         print!("{}{}", termion::clear::All, termion::cursor::Goto(1,1)); // clear the screen
         if self.should_quit {
-            println!("{}👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
+            println!("{} 👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
         }
         else {
             self.draw_rows();
@@ -60,7 +65,7 @@ impl Editor {
     }
 
     fn draw_rows(&self) {
-        for _ in 0..24 { // we are printing 24 tildes
+        for _ in 0..self.terminal.size().height { // we are printing 24 tildes
             println!("👾\r");
         }
     }
