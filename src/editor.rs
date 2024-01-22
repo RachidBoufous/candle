@@ -38,7 +38,10 @@ impl Editor {
         // 1b is the hexadecimal number for the escape key
         // [2J is the code to clear the screen ;; for reference (https://vt100.net/docs/vt100-ug/chapter3.html#ED)
         // OR we could do this
-        print!("{}", termion::clear::All); // clear the screen
+        print!("{}{}", termion::clear::All, termion::cursor::Goto(1,1)); // clear the screen
+        if self.should_quit {
+            println!("{} Quitting Candle, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
+        }
         io::stdout().flush() // flush the screen
     }
 
@@ -69,5 +72,6 @@ fn read_key() -> Result<Key, std::io::Error> {
 ///
 /// * `e` - The error to handle.
 fn die(e: std::io::Error) {
+    print!("{}", termion::clear::All); // clear the screen
     panic!("{}", e); // a macro that crashes the program and prints the error
 }
