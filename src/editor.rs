@@ -1,8 +1,6 @@
-use crate::Terminal::Terminal;
-use std::io::{self, stdout, Write};
+use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
-use termion::input::TermRead; // we import the TermRead trait
-use termion::raw::IntoRawMode; //
+
 
 pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
@@ -13,7 +11,6 @@ pub struct Editor {
 
 impl Editor {
     pub fn run(&mut self) {
-        let _stdout = stdout().into_raw_mode().unwrap(); // read data from standard input (the keyboard)
 
         loop {
             if let Err(error) = self.refresh_screen() {
@@ -43,7 +40,8 @@ impl Editor {
         // 1b is the hexadecimal number for the escape key
         // [2J is the code to clear the screen ;; for reference (https://vt100.net/docs/vt100-ug/chapter3.html#ED)
         // OR we could do this
-        print!("{}{}", termion::clear::All, termion::cursor::Goto(1,1)); // clear the screen
+        Terminal::clear_screen(); // clear the screen
+        Terminal::cursor_position(0,0); // move the cursor to the top left corner
         if self.should_quit {
             println!("{} 👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
         }
@@ -51,11 +49,11 @@ impl Editor {
             self.draw_rows();
             print!("{}", termion::cursor::Goto(1,1)); // move the cursor to the top left corner
         }
-        io::stdout().flush() // flush the screen
+        Terminal::flush() // flush the screen
     }
 
     fn process_keypress(&mut self) -> Result<(), std::io::Error>{
-        let key_pressed = read_key()?;
+        let key_pressed = Terminal::read_key()?;
 
         match key_pressed {
             Key::Ctrl('q') => self.should_quit = true,
@@ -73,13 +71,7 @@ impl Editor {
 
 }
 
-fn read_key() -> Result<Key, std::io::Error> {
-    loop {
-        if let Some(key_pressed) = io::stdin().lock().keys().next() {
-            return key_pressed;
-        }
-    }
-}
+
 
 /// Handles an error by panicking.
 ///
@@ -87,6 +79,6 @@ fn read_key() -> Result<Key, std::io::Error> {
 ///
 /// * `e` - The error to handle.
 fn die(e: std::io::Error) {
-    print!("{}", termion::clear::All); // clear the screen
+    Terminal::clear_screen(); // clear the screen
     panic!("{}", e); // a macro that crashes the program and prints the error
 }

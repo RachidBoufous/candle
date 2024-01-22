@@ -1,7 +1,7 @@
 #![warn(clippy::all, clippy::pedantic)]
 
 mod editor; // here we are importing the editor module
-mod Terminal; // here we are importing the terminal module
+mod terminal; // here we are importing the terminal module
 use editor::Editor; // here we are importing the Editor struct from the editor module
 
 fn main() {
