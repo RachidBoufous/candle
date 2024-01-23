@@ -35,8 +35,8 @@ impl Terminal {
     }
 
     pub fn cursor_position(x: u16, y: u16) {
-        let x = x.saturating_add(1);
-        let y = y.saturating_add(1);
+        let x = x.saturating_add(1); // it checks if it possible to add 1 to x, if it is not possible it returns the maximum value of u16 
+        let y = y.saturating_add(1); // this is to avoid overflow 111 + 1 = 000
         print!("{}", termion::cursor::Goto(x,y)); // move the cursor to the top left corner
     }
 
@@ -50,6 +50,18 @@ impl Terminal {
                 return key;
             }
         }
+    }
+
+    pub fn cursor_hide() {
+        print!("{}", termion::cursor::Hide); // hide the cursor
+    }
+
+    pub fn cursor_show() {
+        print!("{}", termion::cursor::Show); // show the cursor
+    }
+
+    pub fn clear_current_line() {
+        print!("{}", termion::clear::CurrentLine); // clear the current line
     }
 
 }
