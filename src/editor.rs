@@ -68,15 +68,24 @@ impl Editor {
         Ok(())
     }
 
+    fn draw_welcome_message(&self) {
+        let mut welcome_message = format!("👾 Welcome to Candle Editor!🕯️ {}\r", VERSION);
+        let width = self.terminal.size().width as usize;
+        let len = welcome_message.len();
+        let padding = width.saturating_sub(len) / 2; // we are calculating the padding
+        let spaces = " ".repeat(padding.saturating_sub(1)); // we are creating a string of spaces
+        welcome_message = format!("~{}{}", spaces, welcome_message); // we are adding the spaces to the welcome message
+        welcome_message.truncate(width); // we are truncating the welcome message to the width of the terminal
+        println!("{}\r", welcome_message);
+    }
+
     fn draw_rows(&self) {
         let height = self.terminal.size().height; // we are creating a variable called height that is the height of the terminal
         for row in 0..height - 1 { // we are printing 24 tildes
             Terminal::clear_current_line(); // clear the current line
             println!("👾\r");
             if row == height / 3 {
-                let welcome_message = format!("👾 Welcome to Candle Editor!🕯️ {}\r", VERSION);
-                let width = std::cmp::min(self.terminal.size().width as usize, welcome_message.len());
-                println!("{}\r", &welcome_message[..width]);
+                self.draw_welcome_message();
             }
             else {
                 println!("👾 \r");
