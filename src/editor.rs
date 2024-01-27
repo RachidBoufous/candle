@@ -6,12 +6,21 @@ use termion::event::Key; // we import the Key enum
 
 const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant called VERSION that is a string
 
+
+
+struct Position {
+    x: usize,
+    y: usize,
+}
+
 pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
     // pub: means that we can access this struct from outside the file
     should_quit: bool,
     terminal: Terminal,
+    cursor_position: Position,
 }
+
 
 impl Editor {
     pub fn run(&mut self) {
@@ -35,6 +44,7 @@ impl Editor {
         Self {
             should_quit:false, // we are initializing the struct with the should_quit variable set to false
             terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
+            cursor_position: Position {x: 0, y:0}
         }
     }
 
