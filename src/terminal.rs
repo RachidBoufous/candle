@@ -1,3 +1,4 @@
+use crate::Position;
 use std::io::{self, stdout, Write}; // we are importing the io module, the stdout function, and the Write trait
 use termion::event::Key; // we import the Key enum
 use termion::input::TermRead; // we import the TermRead trait
@@ -34,10 +35,13 @@ impl Terminal {
         print!("{}", termion::clear::All); // clear the screen
     }
 
-    pub fn cursor_position(x: u16, y: u16) {
-        let x = x.saturating_add(1); // it checks if it possible to add 1 to x, if it is not possible it returns the maximum value of u16 
-        let y = y.saturating_add(1); // this is to avoid overflow 111 + 1 = 000
-        print!("{}", termion::cursor::Goto(x,y)); // move the cursor to the top left corner
+    #[allow(clippy::cast_possible_truncation)]
+    pub fn cursor_position(position: &Position) {
+        let Position{mut x, mut y}= Position;
+        x = x.saturating_add(1);
+        y = y.saturating_add(1);
+        let x = x as u16;
+        let y = y as u16;
     }
 
     pub fn flush() -> Result<(), std::io::Error> {

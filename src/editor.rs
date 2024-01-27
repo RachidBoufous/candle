@@ -8,7 +8,7 @@ const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant
 
 
 
-struct Position {
+pub struct Position {
     x: usize,
     y: usize,
 }
@@ -17,7 +17,7 @@ pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
     // pub: means that we can access this struct from outside the file
     should_quit: bool,
-    terminal: Terminal,
+    terminal: Terminal::default.expect("Failed to initialize terminal"),
     cursor_position: Position,
 }
 
@@ -56,13 +56,14 @@ impl Editor {
         // OR we could do this
         Terminal::cursor_hide();
         Terminal::clear_screen(); // clear the screen
-        Terminal::cursor_position(0,0); // move the cursor to the top left corner
+        Terminal::cursor_position(&Position {x: 0, y: 0}); // move the cursor to the top left corner
         if self.should_quit {
+            Terminal::clear_screen();
             println!("{} 👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
         }
         else {
             self.draw_rows();
-            print!("{}", termion::cursor::Goto(1,1)); // move the cursor to the top left corner
+            Terminal::cursor_position(&self.cursor_position); // move the cursor to the top left corner
         }
         Terminal::cursor_show();
         Terminal::flush() // flush the screen
