@@ -1,5 +1,4 @@
 use std::rc::Weak;
-
 use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
 
@@ -17,7 +16,7 @@ pub struct Editor {
     // a struct is a collection of variables, functions, which are grouped together to form an unity
     // pub: means that we can access this struct from outside the file
     should_quit: bool,
-    terminal: Terminal::default.expect("Failed to initialize terminal"),
+    terminal: Terminal,
     cursor_position: Position,
 }
 
@@ -80,9 +79,9 @@ impl Editor {
     }
 
     fn draw_welcome_message(&self) {
-        let mut welcome_message = format!("👾 Welcome to Candle Editor!🕯️ {}\r", VERSION);
-        let width = self.terminal.size().width as usize;
-        let len = welcome_message.len();
+        let mut welcome_message = format!("👾 Welcome to Candle Editor!🕯️ {}\r", VERSION); // string that will be used as a message
+        let width = self.terminal.size().width as usize; // we are creating a variable called width that is the width of the terminal
+        let len = welcome_message.len(); // we are creating a variable called len that is the length of the welcome message
         let padding = width.saturating_sub(len) / 2; // we are calculating the padding
         let spaces = " ".repeat(padding.saturating_sub(1)); // we are creating a string of spaces
         welcome_message = format!("~{}{}", spaces, welcome_message); // we are adding the spaces to the welcome message
