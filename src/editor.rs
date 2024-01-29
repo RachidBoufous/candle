@@ -8,8 +8,8 @@ const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant
 
 
 pub struct Position {
-    x: usize,
-    y: usize,
+    pub x: usize,
+    pub y: usize,
 }
 
 pub struct Editor {
