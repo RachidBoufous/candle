@@ -81,11 +81,23 @@ impl Editor {
 
     fn move_cursor(&mut self, key: Key){
         let Position {mut x, mut y} = self.cursor_position;
+        let size = self.terminal.size();
+        let height = size.height.saturating_sub(1) as usize; // we are creating a variable called height that is the height of the terminal
+        let width = size.width.saturating_sub(1) as usize; // we are creating a variable called width that is the width of the terminal
+
         match key {
             Key::Up => y = y.saturating_sub(1), // we are subtracting 1 from y
-            Key::Down => y = y.saturating_add(1), // we are adding 1 to y
+            Key::Down => {
+                if y < height {
+                    y = y.saturating_add(1); // we are adding 1 to y
+                }
+            } // we are adding 1 to y
             Key::Left => x = x.saturating_sub(1), // we are subtracting 1 from x
-            Key::Right => x = x.saturating_add(1), // we are adding 1 to x
+            Key::Right => {
+                if x < width {
+                    x = x.saturating_add(1); // we are adding 1 to x
+                }
+            },// we are adding 1 to x
 
             _ => (),
         }
