@@ -73,9 +73,23 @@ impl Editor {
 
         match key_pressed {
             Key::Ctrl('q') => self.should_quit = true,
+            Key::Up | Key::Down | Key::Left | Key::Right => self.move_cursor(key_pressed),
             _ => (),
         }
         Ok(())
+    }
+
+    fn move_cursor(&mut self, key: Key){
+        let Position {mut x, mut y} = self.cursor_position;
+        match key {
+            Key::Up => y = y.saturating_sub(1), // we are subtracting 1 from y
+            Key::Down => y = y.saturating_add(1), // we are adding 1 to y
+            Key::Left => x = x.saturating_sub(1), // we are subtracting 1 from x
+            Key::Right => x = x.saturating_add(1), // we are adding 1 to x
+
+            _ => (),
+        }
+        self.cursor_position = Position {x, y};
     }
 
     fn draw_welcome_message(&self) {
