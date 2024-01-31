@@ -1,4 +1,5 @@
 use std::rc::Weak;
+use crate::Document;
 use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
 
@@ -18,6 +19,7 @@ pub struct Editor {
     should_quit: bool,
     terminal: Terminal,
     cursor_position: Position,
+    document: Document,
 }
 
 
@@ -43,7 +45,8 @@ impl Editor {
         Self {
             should_quit:false, // we are initializing the struct with the should_quit variable set to false
             terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
-            cursor_position: Position {x: 0, y:0}
+            cursor_position: Position {x: 0, y:0},
+            document: Document::default(),
         }
     }
 
