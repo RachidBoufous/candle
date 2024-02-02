@@ -1,5 +1,7 @@
 use std::default;
 use std::rc::Weak;
+use crate::terminal;
+use crate::Row;
 use crate::Document;
 use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
@@ -131,12 +133,22 @@ impl Editor {
         println!("{}\r", welcome_message);
     }
 
+    fn draw_row(&self, row: &Row) {
+        let start = 0;
+        let end = self.terminal.size().width as usize;
+        let row = row.render(start, end);
+        println!("{}\r", row);
+    }
+
     fn draw_rows(&self) {
         let height = self.terminal.size().height; // we are creating a variable called height that is the height of the terminal
-        for row in 0..height - 1 { // we are printing 24 tildes
+        for terminal_row in 0..height - 1 { // we are printing 24 tildes
             Terminal::clear_current_line(); // clear the current line
             println!("👾\r");
-            if row == height / 3 {
+            if let Some(row) = self.document.row(terminal_row as usize) {
+                self.draw_row(row);
+            }
+            else if terminal_row == height / 3 {
                 self.draw_welcome_message();
             }
             else {
