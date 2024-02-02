@@ -2,3 +2,11 @@
 pub struct Row{
     string: String,
 }
+
+impl From<&str> for Row {
+    fn from(s: &str) -> Self {
+        Self {
+            string: s.to_string(),
+        }
+    }
+}

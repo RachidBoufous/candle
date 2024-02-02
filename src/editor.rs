@@ -1,3 +1,4 @@
+use std::default;
 use std::rc::Weak;
 use crate::Document;
 use crate::terminal::Terminal;
@@ -8,6 +9,7 @@ const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant
 
 
 
+#[derive(Default)] // this is a derive attribute that allows us to derive the default trait for the struct
 pub struct Position {
     pub x: usize,
     pub y: usize,
@@ -46,7 +48,7 @@ impl Editor {
             should_quit:false, // we are initializing the struct with the should_quit variable set to false
             terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
             cursor_position: Position {x: 0, y:0},
-            document: Document::default(),
+            document: Document::open(),
         }
     }
 
@@ -58,7 +60,7 @@ impl Editor {
         // OR we could do this
         Terminal::cursor_hide();
         Terminal::clear_screen(); // clear the screen
-        Terminal::cursor_position(&Position {x: 0, y: 0}); // move the cursor to the top left corner
+        Terminal::cursor_position(&Position::default()); // move the cursor to the top left corner
         if self.should_quit {
             Terminal::clear_screen();
             println!("{} 👾 Quitting Candle 🕯️, Goodbye.❤️\r \n", termion::color::Fg(termion::color::Cyan));
