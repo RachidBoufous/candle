@@ -1,11 +1,12 @@
 use std::default;
 use std::rc::Weak;
+use crate::document;
 use crate::terminal;
 use crate::Row;
 use crate::Document;
 use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
-
+use std::env;
 
 const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant called VERSION that is a string
 
@@ -46,11 +47,19 @@ impl Editor {
     }
 
     pub fn default() -> Self {
+        let args: Vec<String> = env::args().collect();
+        let document = if args.len() > 1 {
+            let file_name = &args[1];
+            Document::open(&file_name).unwrap_or_default();
+        }
+        else {
+            Document::default()
+        };
         Self {
             should_quit:false, // we are initializing the struct with the should_quit variable set to false
             terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
             cursor_position: Position {x: 0, y:0},
-            document: Document::default(),
+            document,
         }
     }
 
