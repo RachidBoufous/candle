@@ -144,7 +144,6 @@ impl Editor {
         let height = self.terminal.size().height; // we are creating a variable called height that is the height of the terminal
         for terminal_row in 0..height - 1 { // we are printing 24 tildes
             Terminal::clear_current_line(); // clear the current line
-            println!("👾\r");
             if let Some(row) = self.document.row(terminal_row as usize) {
                 self.draw_row(row);
             }

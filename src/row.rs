@@ -4,9 +4,9 @@ pub struct Row{
 }
 
 impl From<&str> for Row {
-    fn from(s: &str) -> Self {
+    fn from(slice: &str) -> Self {
         Self {
-            string: s.to_string(),
+            string: String::from(slice),
         }
     }
 }
