@@ -24,6 +24,7 @@ pub struct Editor {
     should_quit: bool,
     terminal: Terminal,
     cursor_position: Position,
+    offset: Position,
     document: Document,
 }
 
@@ -60,6 +61,7 @@ impl Editor {
             terminal: Terminal::default().expect("Failed to initialize terminal"), // we are initializing the terminal
             cursor_position: Position {x: 0, y:0},
             document,
+            offset: Position::default(),
         }
     }
 
@@ -99,7 +101,14 @@ impl Editor {
             => self.move_cursor(key_pressed),
             _ => (),
         }
+        self.scroll();
         Ok(())
+    }
+
+    fn scroll(&mut self) {
+        let Position {mut y, mut x} = self.cursor_position;
+        let width =  self.terminal.size().width as usize;
+        let height = self.terminal.size().height as usize;
     }
 
     fn move_cursor(&mut self, key: Key){
@@ -143,8 +152,9 @@ impl Editor {
     }
 
     fn draw_row(&self, row: &Row) {
-        let start = 0;
-        let end = self.terminal.size().width as usize;
+        let width = self.terminal.size().width as usize; // we are creating a variable called width that is the width of the terminall
+        let start = self.offset.x;
+        let end = self.offset.x + width;
         let row = row.render(start, end);
         println!("{}\r", row);
     }
@@ -153,7 +163,7 @@ impl Editor {
         let height = self.terminal.size().height; // we are creating a variable called height that is the height of the terminal
         for terminal_row in 0..height - 1 { // we are printing 24 tildes
             Terminal::clear_current_line(); // clear the current line
-            if let Some(row) = self.document.row(terminal_row as usize) {
+            if let Some(row) = self.document.row(terminal_row as usize + self.offset.y as usize) {
                 self.draw_row(row);
             }
             else if self.document.is_empty() && terminal_row == height / 3 {
