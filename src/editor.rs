@@ -109,6 +109,19 @@ impl Editor {
         let Position {mut y, mut x} = self.cursor_position;
         let width =  self.terminal.size().width as usize;
         let height = self.terminal.size().height as usize;
+        let mut offset = &mut self.offset;
+
+        if y < offset.y {
+            offset.y = y;
+        }
+        else if y >= offset.y.saturating_add(height){
+            offset.y = y.saturating_sub(height).saturating_add(1);
+        }
+
+        if x < offset.x {
+            offset.x = x;
+        }
+        else if x >= offset.x.saturating_add(width) {}
     }
 
     fn move_cursor(&mut self, key: Key){
