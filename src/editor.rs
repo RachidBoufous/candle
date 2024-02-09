@@ -121,7 +121,9 @@ impl Editor {
         if x < offset.x {
             offset.x = x;
         }
-        else if x >= offset.x.saturating_add(width) {}
+        else if x >= offset.x.saturating_add(width) {
+            offset.x = x.saturating_sub(width).saturating_add(1)
+        }
     }
 
     fn move_cursor(&mut self, key: Key){
