@@ -80,7 +80,10 @@ impl Editor {
         }
         else {
             self.draw_rows();
-            Terminal::cursor_position(&self.cursor_position); // move the cursor to the top left corner
+            Terminal::cursor_position(&Position {
+                x: (self.cursor_position.x - self.offset.x).saturating_add(1),
+                y: (self.cursor_position.y - self.offset.y).saturating_add(1),
+            })
         }
         Terminal::cursor_show();
         Terminal::flush() // flush the screen
@@ -129,9 +132,13 @@ impl Editor {
     fn move_cursor(&mut self, key: Key){
         let Position {mut x, mut y} = self.cursor_position;
         let size = self.terminal.size();
-        let height = size.height.saturating_sub(1) as usize; // we are creating a variable called height that is the height of the terminal
-        let width = size.width.saturating_sub(1) as usize; // we are creating a variable called width that is the width of the terminal
-
+        let height = self.document.len(); // we are creating a variable called height that is the height of the terminal
+        let width = if let Some(row) = self.document.row(y){
+            row.len()
+        }
+        else {
+            0
+        };
         match key {
             Key::Up => y = y.saturating_sub(1), // we are subtracting 1 from y
             Key::Down => {
