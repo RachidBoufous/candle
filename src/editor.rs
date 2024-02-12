@@ -147,7 +147,20 @@ impl Editor {
                     y = y.saturating_add(1); // we are adding 1 to y
                 }
             } // we are adding 1 to y
-            Key::Left => x = x.saturating_sub(1), // we are subtracting 1 from x
+            Key::Left => {
+                if x > 0 {
+                    x -= 1; // we are subtracting 1 from x
+                }
+                else if y > 0 {
+                    y -= 1;
+                    if let Some(row) = self.document.row(y){
+                        x = row.len();
+                    }
+                    else {
+                        x = 0;
+                    }
+                }
+            }, // we are subtracting 1 from x
             Key::Right => {
                 if x < width {
                     x = x.saturating_add(1); // we are adding 1 to x
