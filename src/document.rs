@@ -1,5 +1,5 @@
-use Crate::Row; 
-use std::fs;  
+use crate::row::Row;
+use std::fs;
 
 #[derive(Default)]
 pub struct Document {
