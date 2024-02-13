@@ -51,7 +51,7 @@ impl Editor {
         let args: Vec<String> = env::args().collect();
         let document = if args.len() > 1 {
             let file_name = &args[1];
-            Document::open(&file_name).unwrap_or_default();
+            Document::open(&file_name).unwrap_or_default()
         }
         else {
             Document::default()
