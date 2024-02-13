@@ -163,7 +163,11 @@ impl Editor {
             }, // we are subtracting 1 from x
             Key::Right => {
                 if x < width {
-                    x = x.saturating_add(1); // we are adding 1 to x
+                    x += 1; // we are adding 1 to x
+                }
+                else if x == width && y < height {
+                    y += 1;
+                    x = 0;
                 }
             },// we are adding 1 to x
             Key::PageUp => {
