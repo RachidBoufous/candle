@@ -3,11 +3,13 @@ use std::rc::Weak;
 use crate::document;
 use crate::terminal;
 use crate::Row;
+use termion::color;
 use crate::Document;
 use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
 use std::env;
 
+const STATUS_BG_COLOR: color::Rgb = color::Rgb(239, 239, 239);
 const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant called VERSION that is a string
 
 
@@ -80,6 +82,8 @@ impl Editor {
         }
         else {
             self.draw_rows();
+            self.draw_status_bar();
+            self.draw_message_bar();
             Terminal::cursor_position(&Position {
                 x: (self.cursor_position.x - self.offset.x).saturating_add(1),
                 y: (self.cursor_position.y - self.offset.y).saturating_add(1),
@@ -87,6 +91,17 @@ impl Editor {
         }
         Terminal::cursor_show();
         Terminal::flush() // flush the screen
+    }
+
+    fn draw_status_bar(&self){
+        let spaces = " ".repeat(self.terminal.size().width as usize);
+        Terminal::set_bg_color(STATUS_BG_COLOR);
+        print!("{}\r", spaces);
+        Terminal::reset_bg_color();
+    }
+
+    fn draw_message_bar(&self){
+        Terminal::clear_current_line();
     }
 
     fn process_keypress(&mut self) -> Result<(), std::io::Error>{

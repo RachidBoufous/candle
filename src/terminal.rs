@@ -3,6 +3,8 @@ use std::io::{self, stdout, Write}; // we are importing the io module, the stdou
 use termion::event::Key; // we import the Key enum
 use termion::input::TermRead; // we import the TermRead trait
 use termion::raw::{IntoRawMode, RawTerminal}; // we import the IntoRawMode trait and the RawTerminal struct
+use termion::color;
+
 
 pub struct Size { // we are creating a struct called size
     pub width: u16, // we are creating a variable called width that is a 16 bit unsigned integer
@@ -68,5 +70,7 @@ impl Terminal {
     pub fn clear_current_line() {
         print!("{}", termion::clear::CurrentLine); // clear the current line
     }
+
+   
 
 }
