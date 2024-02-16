@@ -71,6 +71,12 @@ impl Terminal {
         print!("{}", termion::clear::CurrentLine); // clear the current line
     }
 
-   
+    pub fn set_bg_color(color: color::Rgb){
+        print!("{}", color::Bg(color));
+    }
+
+    pub fn reset_bg_color(){
+        print!("{}", color::Bg(color::Reset));
+    }
 
 }
