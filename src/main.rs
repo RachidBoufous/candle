@@ -1,4 +1,4 @@
-#![warn(clippy::all, clippy::pedantic)]
+// #![warn(clippy::all, clippy::pedantic)]
 
 mod editor; // here we are importing the editor module
 mod terminal; // here we are importing the terminal module
