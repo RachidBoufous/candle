@@ -79,4 +79,11 @@ impl Terminal {
         print!("{}", color::Bg(color::Reset));
     }
 
+
+    pub fn set_fg_color(color: color::Rgb){
+        print!("{}", color::Fg(color));
+    }
+
+    
+
 }

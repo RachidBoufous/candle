@@ -9,6 +9,7 @@ use crate::terminal::Terminal;
 use termion::event::Key; // we import the Key enum
 use std::env;
 
+const STATUS_FG_COLOR: color::Rgb = color::Rgb(63, 63, 63);
 const STATUS_BG_COLOR: color::Rgb = color::Rgb(239, 239, 239);
 const VERSION  : &str = env!("CARGO_PKG_VERSION"); // we are creating a constant called VERSION that is a string
 
