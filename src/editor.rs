@@ -94,12 +94,7 @@ impl Editor {
         Terminal::flush() // flush the screen
     }
 
-    fn draw_status_bar(&self){
-        let spaces = " ".repeat(self.terminal.size().width as usize);
-        Terminal::set_bg_color(STATUS_BG_COLOR);
-        print!("{}\r", spaces);
-        Terminal::reset_bg_color();
-    }
+    
 
     fn draw_message_bar(&self){
         Terminal::clear_current_line();
@@ -253,6 +248,8 @@ impl Editor {
             }
         }
     }
+
+    
 
 
 }
